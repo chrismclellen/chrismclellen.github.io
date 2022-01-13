@@ -185,13 +185,17 @@
         })
 
         function start() {
-            // let video_canvas = document.getElementById("video_canvas");
+            let video_canvas = document.getElementById("video_canvas");
 
             // older cam 
-            // player = new libde265.RawPlayer(video_canvas);
+            player = new libde265.RawPlayer(video_canvas);
+
+
             // new cam
-            player = new HxPlayer();
-            player.init({canvas:vid}); //width:640, height:352
+            // player = new HxPlayer();
+            // player.init({canvas:vid}); //width:640, height:352
+
+
             // player.connect()
             // player.playvideo(ip, httpport, stream , username, password);
 
