@@ -1,0 +1,52 @@
+Arguments: 
+  /Users/chrismclellen/.nvm/versions/node/v17.3.0/bin/node /Users/chrismclellen/.yarn/bin/yarn.js deploy
+
+PATH: 
+  /Users/chrismclellen/.nvm/versions/node/v17.3.0/bin:/Users/chrismclellen/google-cloud-sdk/bin:/Users/chrismclellen/.n/bin:/Users/chrismclellen/.amplify/bin:/Users/chrismclellen/.yarn/bin:/Users/chrismclellen/.config/yarn/global/node_modules/.bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/usr/local/MacGPG2/bin:/Applications/Little Snitch.app/Contents/Components:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Applications/Wireshark.app/Contents/MacOS:/Users/chrismclellen/.nvm/versions/node/v17.3.0/bin:/Users/chrismclellen/google-cloud-sdk/bin:/Users/chrismclellen/.n/bin:/Users/chrismclellen/.amplify/bin:/Users/chrismclellen/.yarn/bin:/Users/chrismclellen/.config/yarn/global/node_modules/.bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/Users/chrismclellen/Library/Android/Sdk/emulator:/Users/chrismclellen/Library/Android/Sdk/tools:/Users/chrismclellen/Library/Android/Sdk/tools/bin:/Users/chrismclellen/Library/Android/Sdk/platform-tools:/Users/chrismclellen/Library/Java/JavaVirtualMachines/corretto-1.8.0_302/Contents/Home:/Users/chrismclellen/Library/Android/Sdk/emulator:/Users/chrismclellen/Library/Android/Sdk/tools:/Users/chrismclellen/Library/Android/Sdk/tools/bin:/Users/chrismclellen/Library/Android/Sdk/platform-tools:/Users/chrismclellen/Library/Java/JavaVirtualMachines/corretto-1.8.0_302/Contents/Home
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  17.3.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  SyntaxError: /Users/chrismclellen/Vercel/chrismclellen.github.io/package.json: Unexpected token } in JSON at position 227
+      at JSON.parse (<anonymous>)
+      at /Users/chrismclellen/.yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/Users/chrismclellen/.yarn/lib/cli.js:310:30)
+      at /Users/chrismclellen/.yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "chrismclellen.github.io",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.html",
+    "scripts": {
+  
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "deploy": "firebase deploy",
+      "dev":
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/chrismclellen/chrismclellen.github.io.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/chrismclellen/chrismclellen.github.io/issues"
+    },
+    "homepage": "https://github.com/chrismclellen/chrismclellen.github.io#readme"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
