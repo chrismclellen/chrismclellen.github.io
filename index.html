@@ -188,12 +188,12 @@
             // let video_canvas = document.getElementById("video_canvas");
 
             // older cam 
-            player = new libde265.RawPlayer(vid);
+            // player = new libde265.RawPlayer(vid);
 
 
             // new cam
-            // player = new HxPlayer();
-            // player.init({canvas:vid}); //width:640, height:352
+            player = new HxPlayer();
+            player.init({canvas:vid}); //width:640, height:352
 
 
             // player.connect()
@@ -382,7 +382,7 @@
         <input id="status" value="" type="text" readonly class="form-control-plaintext form-control-sm float-end" />
         <!-- eml_recv -->
     </div>
-    <video src="http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data">video</video>
+    <!-- <video src="http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data">video</video> -->
 
     <div class="container position-absolute bottom-0 wide">
         <div class="row">
