@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>I am Samantha</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="img/assets/favicon.png" rel="icon" type="image/png">
+    <link href="css/init.css" rel="stylesheet" type="text/css">
+    <link href="css/ion-icons.min.css" rel="stylesheet" type="text/css">
+    <link href="css/etline-icons.min.css" rel="stylesheet" type="text/css">
+    <link href="css/theme.css" rel="stylesheet" type="text/css">
+    <link href="css/custom.css" rel="stylesheet" type="text/css">
+    <link href="css/colors/purple.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700%7CRaleway:400,100,200,300%7CHind:400,300"
+        rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+    <style>
+        body {
+            background: #000;
+            color: #aaa;
+            font: 100%/20px helvetica, arial, sans-serif;
+        }
+
+        canvas {
+            display: block;
+            height: 100%;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            position: absolute;
+            top: 0;
+            width: 100%
+        }
+
+        #control-panel {
+            background: rgba(0, 0, 0, .75);
+            border: 1px solid #333;
+            left: 20px;
+            padding: 10px 15px;
+            position: absolute;
+            top: 20px;
+            z-index: 2;
+        }
+
+        p {
+            font-size: 12px;
+            margin: 0 0 5px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        button {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        a {
+            border-bottom: 1px dotted #444;
+            color: #fff;
+            font-size: 12px;
+            text-decoration: none;
+        }
+    </style>
+
+    <script src="js/anime.js"></script>
+
+    <script type="text/javascript">
+
+        window.addEventListener('load', function () {
+            window.human = false;
+
+            var canvasEl = document.querySelector('.fireworks');
+            var ctx = canvasEl.getContext('2d');
+            var numberOfParticules = 70;
+            var pointerX = 0;
+            var pointerY = 0;
+            var tap = ('ontouchstart' in window || navigator.msMaxTouchPoints) ? 'touchstart' : 'mousedown';
+            var colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C'];
+
+            function setCanvasSize() {
+                canvasEl.width = window.innerWidth * 2;
+                canvasEl.height = window.innerHeight * 2;
+                canvasEl.style.width = window.innerWidth + 'px';
+                canvasEl.style.height = window.innerHeight + 'px';
+                canvasEl.getContext('2d').scale(2, 2);
+            }
+
+            function updateCoords(e) {
+                pointerX = e.clientX || e.touches[0].clientX;
+                pointerY = e.clientY || e.touches[0].clientY;
+            }
+
+            function setParticuleDirection(p) {
+                var angle = anime.random(0, 360) * Math.PI / 180;
+                var value = anime.random(50, 180);
+                var radius = [-1, 1][anime.random(0, 1)] * value;
+                return {
+                    x: p.x + radius * Math.cos(angle),
+                    y: p.y + radius * Math.sin(angle)
+                }
+            }
+
+            function createParticule(x, y) {
+                var p = {};
+                p.x = x;
+                p.y = y;
+                p.color = colors[anime.random(0, colors.length - 1)];
+                p.radius = anime.random(16, 32);
+                p.endPos = setParticuleDirection(p);
+                p.draw = function () {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI, true);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                }
+                return p;
+            }
+
+            function createCircle(x, y) {
+                var p = {};
+                p.x = x;
+                p.y = y;
+                p.color = '#FFF';
+                p.radius = 0.1;
+                p.alpha = .5;
+                p.lineWidth = 6;
+                p.draw = function () {
+                    ctx.globalAlpha = p.alpha;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, 2 * Math.PI, true);
+                    ctx.lineWidth = p.lineWidth;
+                    ctx.strokeStyle = p.color;
+                    ctx.stroke();
+                    ctx.globalAlpha = 1;
+                }
+                return p;
+            }
+
+            function renderParticule(anim) {
+                for (var i = 0; i < anim.animatables.length; i++) {
+                    anim.animatables[i].target.draw();
+                }
+            }
+
+            function animateParticules(x, y) {
+                var circle = createCircle(x, y);
+                var particules = [];
+                for (var i = 0; i < numberOfParticules; i++) {
+                    particules.push(createParticule(x, y));
+                }
+                anime.timeline().add({
+                    targets: particules,
+                    x: function (p) { return p.endPos.x; },
+                    y: function (p) { return p.endPos.y; },
+                    radius: 0.1,
+                    duration: anime.random(1200, 1800),
+                    easing: 'easeOutExpo',
+                    update: renderParticule
+                })
+                    .add({
+                        targets: circle,
+                        radius: anime.random(80, 160),
+                        lineWidth: 0,
+                        alpha: {
+                            value: 0,
+                            easing: 'linear',
+                            duration: anime.random(600, 800),
+                        },
+                        duration: anime.random(1200, 1800),
+                        easing: 'easeOutExpo',
+                        update: renderParticule,
+                        offset: 0
+                    });
+            }
+
+            var render = anime({
+                duration: Infinity,
+                update: function () {
+                    ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+                }
+            });
+
+            document.addEventListener(tap, function (e) {
+                window.human = true;
+                render.play();
+                updateCoords(e);
+                animateParticules(pointerX, pointerY);
+            }, false);
+
+            var centerX = window.innerWidth / 2;
+            var centerY = window.innerHeight / 2;
+
+            function autoClick() {
+                if (window.human) return;
+                animateParticules(
+                    anime.random(centerX - 50, centerX + 50),
+                    anime.random(centerY - 50, centerY + 50)
+                );
+                anime({ duration: 200 }).finished.then(autoClick);
+            }
+
+            autoClick();
+            setCanvasSize();
+            window.addEventListener('resize', setCanvasSize, false);
+
+        })
+
+
+
+    </script>
+</head>
+
+<body data-fade-in="true">
+
+
+    
+
+    <!-- Start Header -->
+    <nav class="navbar nav-down" data-fullwidth="true" data-menu-style="transparent" data-animation="shrink">
+        <div class="container">
+
+            <div class="navbar-header">
+                <div class="container">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar top-bar"></span>
+                        <span class="icon-bar middle-bar"></span>
+                        <span class="icon-bar bottom-bar"></span>
+                    </button>
+                    <a class="navbar-brand to-top" href="#"><img src="img/assets/sammy-light.png" class="logo-light"
+                            alt="#"><img src="img/assets/sammy-dark.png" class="logo-dark" alt="#"></a>
+                </div>
+            </div>
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <div class="container">
+                    <ul class="nav navbar-nav menu-right">
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- End Header -->
+
+    <canvas id="fireworks" class="fireworks"></canvas>
+    <div class="background-image">
+        <img src="img/backgrounds/bg-sam.png" alt="#">
+        
+    </div>
+
+    <!-- Hero -->
+    <section id="hero" class="hero-fullscreen parallax" data-overlay-dark="7">
+     
+
+        <div class="container">
+            <div class="row">
+
+                <div class="hero-content-slider mt20" data-autoplay="true" data-speed="4000">
+
+                    <div>
+                        <h1>I'm Awesome!!!<br><strong>I Make Cool Shit</strong></h1>
+                        <p class="lead">Don't you forget it</p>
+                        <a href="#about" class="btn btn-lg btn-primary btn-scroll">About Me</a>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- End Hero -->
+
+
+
+
+
+
+    <!-- Start Footer -->
+    <footer id="footer" class="footer style-1 dark">
+
+        <a href="#" target="_blank"><strong>© McLellen 2022</strong></a>
+        <p>Made with love by Dad.</p>
+
+        <!-- Back To Top Button -->
+        <span><a class="scroll-top"><i class="ion-chevron-up"></i></a></span>
+
+    </footer>
+    <!-- End Footer -->
+
+
+    <script src="js/jquery.js"></script>
+    <script src="js/init.js"></script>
+    <script src="js/scripts.js"></script>
+
+</body>
+
+</html>
