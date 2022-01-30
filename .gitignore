@@ -28,3 +28,4 @@ yarn-error.log*
 # package
 /dist
 /.next
+public/cert.html
