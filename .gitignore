@@ -29,3 +29,5 @@ yarn-error.log*
 /dist
 /.next
 public/cert.html
+.DS_Store
+.firebase/hosting.cHVibGlj.cache
