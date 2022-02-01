@@ -29,7 +29,7 @@
             left: 0;
             margin: 0;
             padding: 0;
-            position: absolute;
+            position: relative;
             top: 0;
             width: 100%
           }
@@ -106,8 +106,8 @@
             addEventListener("mousemove", (e) => {
               //cursor.x = e.clientX;
               //cursor.y = e.clientY;
-              myX = e.clientX;
-              myY = e.clientY;
+              myX = e.offsetX;
+              myY = e.offsetY;
               // console.log(myX)
             });
             
@@ -234,18 +234,11 @@
     <body data-fade-in="true">
 
 
-        <section id="team" class="hero-fullscreen2 pt100 pb90">
-            <div id="control-panel">
-                <p>Click and drag to make more!</p>
-                <label>Trails: </label>
-                <input type="checkbox" id="trail" name="trail" checked />
-                <button id="clear">Clear</button>
-                <a href="https://codepen.io/jackrugile/pen/aCzHs" target="_blank">View Version 2</a>
-                </div>
-                <canvas style="z-index:1000" id="c"></canvas>
-        </section>
 
-        <div class="pre-loader"><div></div></div>
+
+        <div class="pre-loader"><div>
+
+        </div></div>
 
         <!-- Start Header -->
         <nav class="navbar nav-down" data-fullwidth="true" data-menu-style="transparent" data-animation="shrink">
@@ -321,19 +314,15 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a class="dropdown-toggle">Blog<i class="ion-ios-arrow-down"></i></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="blog-standard.html">Standard Layout</a></li>
-                                    <li><a href="blog-list.html">List Layout</a></li>
-                                    <li><a href="blog-grid.html">Grid Layout</a></li>
-                                    <li><a href="blog-post-standard.html">Standard Post</a></li>
-                                    <li><a href="blog-post-gallery.html">Gallery Post</a></li>
-                                    <li><a href="blog-post-video.html">Video Post</a></li>
-                                    <li><a href="blog-post-fullwidth.html">Fullwidth Post</a></li>
-                                </ul>
                             </li> -->
+                            <li class="dropdown">
+                                <a class="dropdown-toggle">POS IP Cam<i class="ion-ios-arrow-down"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="https://chrome.google.com/webstore/detail/pos-ip-camera/gbmahbabdhohnepmlfchdhlkgneodhjo">Chrome Extension</a></li>
+                                    <li><a href="cert.html">Your Certificate</a></li>
+                                    <li><a href="https://www.youtube.com/watch?v=pwnSbOZFUy8">TV Commercial</a></li>
+                                </ul>
+                            </li> 
                             <li><a href="#contact">Contact</a></li>
 <!-- 
                             <li class="nav-separator"></li>
@@ -365,11 +354,11 @@
                             <a href="#about" class="btn btn-lg btn-primary btn-scroll">My Creations</a>
                         </div>
 
-                        <div>
+                        {{/*  <div>
                             <h1>I'm Ingenious<br><strong>I Make Brands Shine</strong></h1>
                             <p class="lead">Innovation, creativity, effectiveness and all that with love.</p>
                             <a href="#about" class="btn btn-lg btn-primary btn-scroll">What I do</a>
-                        </div>
+                        </div>  */}}
 
                         <div>
                             <h1>I'm Lazy<br><strong>I stole this web template</strong></h1>
@@ -397,6 +386,18 @@
             </div>
         </section>
         <!-- End Hero -->
+
+        <section id="colors" class="hero-fullscreen2 pt100 pb90">
+            <div id="control-panel" style="visibility: hidden;">
+                <p>Click and drag to make more!</p>
+                <label>Trails: </label>
+                <input type="checkbox" id="trail" name="trail" checked />
+                <button id="clear">Clear</button>
+                <a href="https://codepen.io/jackrugile/pen/aCzHs" target="_blank">View Version 2, this guy is awesome</a>
+                </div>
+                Click somewhere, I dare you
+                <canvas style="z-index:1000" id="c"></canvas>
+        </section>
 
         <!-- About Us -->
         <!-- <section id="about" class="pt100 pb90">

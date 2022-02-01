@@ -31,3 +31,4 @@ yarn-error.log*
 public/cert.html
 .DS_Store
 .firebase/hosting.cHVibGlj.cache
+.DS_Store
