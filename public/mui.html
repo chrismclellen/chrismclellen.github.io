@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>My page</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
+    <script src="https://unpkg.com/react@latest/umd/react.development.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@latest/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@mui/material@latest/umd/material-ui.development.js"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/babel-standalone@latest/babel.min.js" crossorigin="anonymous"></script>
+    <!-- Fonts to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <!-- Icons to support Material Design -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+</head>
+
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const {
+            colors,
+            CssBaseline,
+            ThemeProvider,
+            Typography,
+            Container,
+            createTheme,
+            Box,
+            SvgIcon,
+            Link,
+            Drawer,
+            Button,
+            List,
+            ListItem,
+            ListItemIcon,
+            InboxIcon,
+            ListItemText,
+            MailIcon,
+            Divider,
+        } = MaterialUI;
+
+        // Create a theme instance.
+        const theme = createTheme({
+            palette: {
+                primary: {
+                    main: '#556cd6',
+                },
+                secondary: {
+                    main: '#19857b',
+                },
+                error: {
+                    main: colors.red.A400,
+                },
+            },
+        });
+
+        function LightBulbIcon(props) {
+            return (
+                <SvgIcon {...props}>
+                    <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z" />
+                </SvgIcon>
+            );
+        }
+
+        function ProTip() {
+            return (
+                <Typography sx={{ mt: 6, mb: 3 }} color="text.secondary">
+                    <LightBulbIcon sx={{ mr: 1, verticalAlign: 'top' }} />
+                    Pro tip: See more
+                    <Link href="https://mui.com/getting-started/templates/">
+                        templates
+                    </Link>
+                    on the MUI documentation.
+                </Typography>
+            );
+        }
+
+        function Copyright() {
+            return (
+                <Typography variant="body2" color="text.secondary" align="center">
+                    <Link color="inherit" href="https://mui.com/">
+                        Your Website
+                    </Link>
+                </Typography>
+            );
+        }
+
+        function App() {
+            return (
+                <Container maxWidth="sm">
+                    <Box sx={{ my: 4 }}>
+                        <Typography variant="h4" component="h1" gutterBottom>
+                            CDN example
+                        </Typography>
+                        <ProTip />
+                        <Copyright />
+                    </Box>
+                </Container>
+            );
+        }
+
+
+
+
+
+        function TemporaryDrawer() {
+            const [state, setState] = React.useState({
+                top: false,
+                left: false,
+                bottom: false,
+                right: false,
+            });
+
+            const toggleDrawer = (anchor, open) => (event) => {
+                if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+                    return;
+                }
+
+                setState({ ...state, [anchor]: open });
+            };
+
+            const list = (anchor) => (
+                <Box
+                    sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+                    role="presentation"
+                    onClick={toggleDrawer('left', false)}
+                    onKeyDown={toggleDrawer('left', false)}
+                >
+                    <List>
+                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                            <ListItem button key={text}>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                    <MailIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItem>
+                        ))}
+                    </List>
+                    <Divider />
+                    <List>
+                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                            <ListItem button key={text}>
+                                <ListItemIcon>
+                                    <InboxIcon />
+                                    <MailIcon />
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
+            );
+
+            return (
+                <div>
+
+                    <React.Fragment key={"12"}>
+                        <Button onClick={toggleDrawer('left', true)}>dfaasf</Button>
+                        <Drawer
+                            anchor={'left'}
+                            open={true}
+                            onClose={() => false}
+                        >
+                            top
+                        </Drawer>
+                    </React.Fragment>
+
+                </div>
+            );
+        }
+
+        function StickyFooter() {
+            return (
+                <Box
+                    sx={{
+                        display: 'flex',            
+                        flexDirection: 'column',
+                        minHeight: '100vh',
+                    }}
+                >
+                    <CssBaseline />
+                    <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
+                        <Typography variant="h2" component="h1" gutterBottom>
+                            Sticky footer
+                        </Typography>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                            {'Pin a footer to the bottom of the viewport.'}
+                            {'The footer will move as the main element of the page grows.'}
+                        </Typography>
+                        <Typography variant="body1">Sticky footer placeholder.</Typography>
+                    </Container>
+                    <Box
+                        component="footer"
+                        sx={{
+                            py: 3,
+                            px: 2,
+                            mt: 'auto',
+                            backgroundColor: (theme) =>
+                                theme.palette.mode === 'light'
+                                    ? theme.palette.grey[200]
+                                    : theme.palette.grey[800],
+                        }}
+                    >
+                        <Container maxWidth="sm">
+                            <Typography variant="body1">
+                                My sticky footer can be found here.
+
+                            </Typography>
+                            <Copyright />
+                        </Container>
+                    </Box>
+                </Box>
+            )
+        }
+
+        let open = true;
+
+        ReactDOM.render(
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <App />
+                <Button onClick={console.log('fuck')}>{'dick'}</Button>
+                <Drawer
+                    anchor={'bottom'}
+                    open={0}
+                    onClose={() => { false }}
+                    style={{ 'backgroundColor': '#FFFFFF', "opacity": .2, "transition": "opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms" }}
+                >
+                    bitch as  nigger
+                </Drawer>
+                <StickyFooter/>
+            </ThemeProvider>,
+            document.querySelector('#root'),
+        );
+    </script>
+</body>
+
+</html>

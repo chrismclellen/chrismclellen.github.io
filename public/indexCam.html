@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
 <head>
@@ -9,17 +9,8 @@
     style-src-elem 'self' https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css 'sha256-s/nONyik3gL8ds1oA1nz67vcgB4VkNfZ1V8wWmvI0EE=';"> -->
     <title>IP FUCKING CAMERA</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
-    <!-- <script src="./js/ffmpeg.js" type="text/javascript"></script> -->
-    <!-- <script type="text/javascript">
-        if (navigator.appVersion.indexOf("iPod") == -1 && navigator.appVersion.indexOf("iPhone") == -1 && navigator.appName.indexOf("Microsoft Internet Explorer") == -1) {
-            document.write("<script src='/js/commonff.js'/>");
-            document.write("<script src='/js/pcm-player.js'/>");
-            document.write("<script src='/js/video-player.js'/>");
-            document.write("<script src='/js/webgl-player.js'/>");
-        }
-    </script> -->
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/menu.css" />
     <script src="./js/libde265.js" type="text/javascript"></script>
     <script src="./js/commonff.js" type="text/javascript"></script>
@@ -37,7 +28,26 @@
             height: 100%;
             background-color: #434343;
             background-size: 75px 75px;
-            background-image: linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, .05) 25%, rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%, rgba(255, 255, 255, .05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, .05) 25%, rgba(255, 255, 255, .05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, .05) 75%, rgba(255, 255, 255, .05) 76%, transparent 77%, transparent);
+            background-image: linear-gradient(0deg,
+                    transparent 24%,
+                    rgba(255, 255, 255, 0.05) 25%,
+                    rgba(255, 255, 255, 0.05) 26%,
+                    transparent 27%,
+                    transparent 74%,
+                    rgba(255, 255, 255, 0.05) 75%,
+                    rgba(255, 255, 255, 0.05) 76%,
+                    transparent 77%,
+                    transparent),
+                linear-gradient(90deg,
+                    transparent 24%,
+                    rgba(255, 255, 255, 0.05) 25%,
+                    rgba(255, 255, 255, 0.05) 26%,
+                    transparent 27%,
+                    transparent 74%,
+                    rgba(255, 255, 255, 0.05) 75%,
+                    rgba(255, 255, 255, 0.05) 76%,
+                    transparent 77%,
+                    transparent);
         }
 
         .vl {
@@ -70,331 +80,255 @@
             margin: 5px;
             border-radius: 1rem;
         }
+
         .container {
-        width: 100%;
+            width: 100%;
         }
+
         .wide {
-            width: 100vw
+            width: 100vw;
         }
     </style>
     <script type="text/javascript">
-
         var player = null;
-        var ip = '192.168.0.39';
-        var httpport = '80';
-        var username = 'admin';
-        var password = 'passw0rd123'
+        var ip = window.localStorage.getItem("IP") || promptForIp(); // '192.168.0.39';
+        var httpport = window.localStorage.getItem("PORT") || promptForPort(); //'80';
+        var username = window.localStorage.getItem("USER") || promptForUser(); // 'admin';
+        var password = window.localStorage.getItem("PASS") || promptForPass(); //'passw0rd123'
         var b64 = new Base64();
         var base64User = b64.encode(username + ":" + password);
-        var vid = '';
-        var stream = '11'; //stream 11 causes major lag, fucks everything up
+        var vid = null;
+        var stream = "12"; //stream 11 causes major lag, fucks everything up
         var status;
+        var videoUrl = window.location.search.vid || "";
 
-        window.addEventListener('load', function () {
+        var extraStuff = `rtsp://default:@192.168.0.39:554/11
+         http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data `;
 
-            vid = document.getElementById('video_canvas')
+        if (!ip) {
+            ip = promptForIp();
+        }
+        if (!httpport) {
+            httpport = promptForPort();
+        }
+        if (!username) {
+            username = promptForUsername();
+        }
+        if (!password) {
+            password = promptForPassword();
+        }
+
+        window.addEventListener("load", function () {
+            vid = document.getElementById("video_canvas");
             vid.width = window.innerWidth;
             vid.height = window.innerHeight;
             status = document.getElementById("status");
 
-            start()
+            start();
 
             function windowResize() {
                 vid.width = window.innerWidth;
                 vid.height = window.innerHeight;
-            };
+            }
 
-            window.addEventListener('resize', windowResize);
+            window.addEventListener("resize", windowResize);
 
             // var elemLeft = vid.offsetLeft + vid.clientLeft,
             //     elemTop = vid.offsetTop + vid.clientTop,
             //     context = vid.getContext('2d'),
             //     elements = [];
 
-            document.addEventListener('keydown', (e) => {
-                if (e.code === "KeyZ" || e.code === "KeyX" || e.code.includes("Arrow")) {
-                    e.preventDefault()
-                    e.stopPropagation()
+            document.addEventListener("keydown", (e) => {
+                if (
+                    e.code === "KeyZ" ||
+                    e.code === "KeyX" ||
+                    e.code.includes("Arrow")
+                ) {
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
                 switch (e.code) {
-                    case 'ArrowLeft':
-                        ptzcmdSubmit('left')
+                    case "ArrowLeft":
+                        ptzcmdSubmit("left");
                         break;
-                    case 'ArrowRight':
-                        ptzcmdSubmit('right')
+                    case "ArrowRight":
+                        ptzcmdSubmit("right");
                         break;
-                    case 'ArrowUp':
-                        ptzcmdSubmit('up')
+                    case "ArrowUp":
+                        ptzcmdSubmit("up");
                         break;
-                    case 'ArrowDown':
-                        ptzcmdSubmit('down')
+                    case "ArrowDown":
+                        ptzcmdSubmit("down");
                         break;
-                    case 'KeyZ':
-                        ptzcmdSubmit('zoomin')
+                    case "KeyZ":
+                        ptzcmdSubmit("zoomin");
                         break;
-                    case 'KeyX':
-                        ptzcmdSubmit('zoomout')
+                    case "KeyX":
+                        ptzcmdSubmit("zoomout");
                         break;
                     default:
                     // console.log(e.code)
                 }
             });
 
-            document.addEventListener('keyup', (e) => {
-                if (e.code === "KeyZ" || e.code === "KeyX" || e.code.includes("Arrow")) {
-                    ptzcmdSubmit('stop')
+            document.addEventListener("keyup", (e) => {
+                if (
+                    e.code === "KeyZ" ||
+                    e.code === "KeyX" ||
+                    e.code.includes("Arrow")
+                ) {
+                    ptzcmdSubmit("stop");
                 }
             });
 
+            vid.addEventListener(
+                "mousedown",
+                function (e) {
+                    xCenter = window.innerWidth / 2;
+                    yCenter = window.innerHeight / 2;
+                    xDelta = xCenter - e.offsetX;
+                    yDelta = yCenter - e.offsetY;
+                    xPercent = xDelta / window.innerWidth;
+                    yPercent = yDelta / window.innerHeight;
+                    rate = $("#rate").val();
+                    rate = 63 / rate;
 
-            vid.addEventListener('mousedown', function (e) {
-                xCenter = window.innerWidth / 2;
-                yCenter = window.innerHeight / 2;
-                xDelta = xCenter - e.offsetX;
-                yDelta = yCenter - e.offsetY;
-                xPercent = (xDelta / window.innerWidth);
-                yPercent = (yDelta / window.innerHeight);
-                rate = $('#rate').val();
-                rate = 63 / rate;
+                    let upDown = (yPercent) => {
+                        if (yPercent < 0) {
+                            //move down
+                            ptzcmdSubmit("down");
+                            setTimeout(() => {
+                                ptzcmdSubmit("stop");
+                            }, Math.abs(yPercent) * (2100 * rate));
+                        } else {
+                            //move up
+                            ptzcmdSubmit("up");
+                            setTimeout(() => {
+                                ptzcmdSubmit("stop");
+                            }, Math.abs(yPercent) * (2100 * rate));
+                        }
+                    };
 
-                let upDown = (yPercent) => {
-                    if (yPercent < 0) {
-                        //move down
-                        ptzcmdSubmit('down')
-                        setTimeout(() => { ptzcmdSubmit('stop') }, Math.abs(yPercent) * (2100 * rate));
+                    if (xPercent < 0) {
+                        //move right
+                        ptzcmdSubmit("right");
+                        setTimeout(() => {
+                            ptzcmdSubmit("stop");
+                            upDown(yPercent);
+                        }, Math.abs(xPercent) * (4000 * rate));
+                    } else if (xPercent > 0) {
+                        //move left
+                        ptzcmdSubmit("left");
+                        setTimeout(() => {
+                            ptzcmdSubmit("stop");
+                            upDown(yPercent);
+                        }, Math.abs(xPercent) * (4000 * rate));
                     } else {
-                        //move up
-                        ptzcmdSubmit('up')
-                        setTimeout(() => { ptzcmdSubmit('stop') }, Math.abs(yPercent) * (2100 * rate));
+                        console.log("hey");
+                        upDown(yPercent);
                     }
-                }
+                },
+                false
+            );
+        });
 
-                if (xPercent < 0) {
-                    //move right
-                    ptzcmdSubmit('right')
-                    setTimeout(() => {
-                        ptzcmdSubmit('stop');
-                        upDown(yPercent);
-                    }, Math.abs(xPercent) * (4000 * rate));
-                } else if (xPercent > 0) {
-                    //move left
-                    ptzcmdSubmit('left')
-                    setTimeout(() => {
-                        ptzcmdSubmit('stop');
-                        upDown(yPercent);
-                    }, Math.abs(xPercent) * (4000 * rate));
-                } else {
-                    console.log('hey')
-                    upDown(yPercent);
-                }
-            }, false)
-        })
+        function promptForIp() {
+            var ip = prompt("Enter IP Address", "192.168.0.39");
+            if (ip != null) {
+                window.localStorage.setItem("IP", ip);
+            }
+            return ip;
+        }
+
+        function promptForPort() {
+            var port = prompt("Enter HTTP Port", "80");
+            if (port != null) {
+                window.localStorage.setItem("PORT", port);
+            }
+            return port;
+        }
+
+        function promptForUser() {
+            var user = prompt(
+                'Enter Username. (default user is "default" with no password. Try it!)',
+                "default"
+            );
+            if (user != null) {
+                window.localStorage.setItem("USER", user);
+            }
+            return user;
+        }
+
+        function promptForPass() {
+            var pass = prompt('Enter Password. (leave blank if using "default" username, unless you changed it)', '');
+            if (pass != null) {
+                window.localStorage.setItem("PASS", pass);
+            }
+            return pass;
+        }
 
         function start() {
-            // old cam 
-            // player = new libde265.RawPlayer(vid);
-            // new cam
-            player = new HxPlayer();
-            player.init({ canvas: vid }); //width:640, height:352
-
-            // player.connect()
-            player.playvideo(ip, httpport, stream, username, password);
-
-            // player.set_status_callback((e, f = '') => {
-            //     let txt = document.getElementById("eml_recv");
-            //     txt.value = e + " " + f;
-            // })
-
-            /*  player.set_status_callback(function (msg, fps) {
-                switch (msg) {
-                    case "loading":
-                        status.innerHTML = "Loading movie...";
-                        break;
-                    case "initializing":
-                        status.innerHTML = "Initializing...";
-                        break;
-                    case "playing":
-                        status.innerHTML = "Playing...";
-                        break;
-                    case "stopped":
-                        status.innerHTML = "";
-                        break;
-                    case "fps":
-                        status.innerHTML = Number(fps).toFixed(2) + " fps";
-                        break;
-                    default:
-                        status.innerHTML = msg;
+            if (ip && httpport && username && password) {
+                if (videoUrl.length > 0) {
+                    console.log(videoUrl);
+                    player = new libde265.RawPlayer(vid);
+                    player.playback(`http://${ip}:${port}/tmpfs/${videoUrl}`);
+                } else {
+                    player = new HxPlayer();
+                    player.init({ canvas: vid }); //width:640, height:352
+                    player.playvideo(ip, httpport, stream, username, password);
                 }
-            });  */
-
-            // player.playvideo(ip, httpport, stream, username, password);
-
-            //getDays()
-        }
-
-        function stopchrome() {
-            if (player != null) {
-                player.stopvideo();
-                player = null;
+                // new cam
             }
         }
+
 
         var timer = 0;
         function ptzcmdSubmit(casename, step = 0) {
-            if (timer === 0 && casename != 'stop') {
-                timer = Date.now()
+            if (timer === 0 && casename != "stop") {
+                timer = Date.now();
             }
 
-            var speed = $('#rate').val()
-            frame = document.getElementById('frame');
-            frame.src = 'http://' + ip + '/web/cgi-bin/hi3510/ptzctrl.cgi?-step=' + step + '&-act=' + casename + '&-speed=' + speed;
+            var speed = $("#rate").val();
+            frame = document.getElementById("frame");
+            frame.src = "http://" + ip + "/web/cgi-bin/hi3510/ptzctrl.cgi?-step=" + step + "&-act=" + casename + "&-speed=" + speed;
 
-            if (timer !== 0 && casename === 'stop') {
-                console.log(Date.now() - timer)
-                timer = 0
+            if (timer !== 0 && casename === "stop") {
+                console.log(Date.now() - timer);
+                timer = 0;
             }
         }
         function ptzout() {
-            ptzcmdSubmit('stop');
+            ptzcmdSubmit("stop");
         }
         function ptzctrlpresetSubmit(casenum) {
-            frame = document.getElementById('frame');
-            frame.src = 'http://' + ip + '/web/cgi-bin/hi3510/preset.cgi?-act=goto&-number=' + casenum;
+            frame = document.getElementById("frame");
+            frame.src = "http://" + ip + "/web/cgi-bin/hi3510/preset.cgi?-act=goto&-number=" + casenum;
         }
         function ptzsetpresetSubmit(casenum) {
-            frame = document.getElementById('frame');
-            frame.src = 'http://' + ip + '/web/cgi-bin/hi3510/preset.cgi?-act=set&-status=1&-number=' + casenum;
+            frame = document.getElementById("frame");
+            frame.src = "http://" + ip + "/web/cgi-bin/hi3510/preset.cgi?-act=set&-status=1&-number=" + casenum;
         }
-        function set_preset() {
-            var preset = document.getElementById('preset').value - 1;
-            frame = document.getElementById('frame');
-            frame.src = 'http://' + ip + '/web/cgi-bin/hi3510/param.cgi?cmd=preset&-act=set&-status=1&-number=' + preset;
+        function set_preset(casenum = -1) {
+            if (casenum === -1) {
+                casenum = document.getElementById("preset").value - 1;
+            }
+
+            frame = document.getElementById("frame");
+            frame.src = "http://" + ip + "/web/cgi-bin/hi3510/param.cgi?cmd=preset&-act=set&-status=1&-number=" + casenum;
         }
+
         function poscall_preset() {
-            var preset = document.getElementById('preset').value - 1;
-            frame = document.getElementById('frame');
-            frame.src = 'http://' + ip + '/web/cgi-bin/hi3510/param.cgi?cmd=preset&-act=goto&-status=1&-number=' + preset;
+            var preset = document.getElementById("preset").value - 1;
+            frame = document.getElementById("frame");
+            frame.src = "http://" + ip + "/web/cgi-bin/hi3510/param.cgi?cmd=preset&-act=goto&-status=1&-number=" + preset;
         }
+
         function del_preset() {
-            var preset = document.getElementById('preset').value - 1;
-            frame = document.getElementById('frame');
-            frame.src = 'http://' + ip + '/web/cgi-bin/hi3510/param.cgi?cmd=preset&-act=set&-status=0&-number=' + preset;
+            var preset = document.getElementById("preset").value - 1;
+            frame = document.getElementById("frame");
+            frame.src = "http://" + ip + "/web/cgi-bin/hi3510/param.cgi?cmd=preset&-act=set&-status=0&-number=" + preset;
         }
-
-        function playback2(file) {
-            console.log("playing " + file)
-            if (player) {
-                player.stop();
-            }
-            // player.stopvideo()
-            // player._reset()
-            var video_canvas = document.getElementById("video_canvas");
-            player = new libde265.RawPlayer(video_canvas);
-            // player.set_status_callback((e, f = '') => {
-            //     let txt = document.getElementById("eml_recv");
-            //     txt.value = e + " " + f;
-            // })
-            player.playback(file);
-        }
-
-        {
-            {/*  
-        function playback(file) {
-            // event.preventDefault();
-            if (player) {
-                player.stopvideo() || player.stop();
-                // player.stop();
-            }
-
-            player = new libde265.RawPlayer(vid);
-            player.set_status_callback(function (msg, fps) {
-                switch (msg) {
-                    case "loading":
-                        status.innerHTML = "Loading movie...";
-                        break;
-                    case "initializing":
-                        status.innerHTML = "Initializing...";
-                        break;
-                    case "playing":
-                        status.innerHTML = "Playing...";
-                        break;
-                    case "stopped":
-                        status.innerHTML = "";
-                        break;
-                    case "fps":
-                        status.innerHTML = Number(fps).toFixed(2) + " fps";
-                        break;
-                    default:
-                        status.innerHTML = msg;
-                }
-            }) 
-            player.playback(file);
-        };  */}
-        }
-
-
-        function getDays() {
-            let d = new Date();
-            let y = d.getFullYear();
-            let m = `${d.getMonth() + 1}`;
-            m = m.padStart(2, '0');
-            let day = `${d.getDate()}`;
-            day = day.padStart(2, '0');
-            let date = `${y}${m}${day}`;
-            console.log(date)
-
-            // headers = {
-            //     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            //     "crossdomain" : "true",
-            //     "Origin": "http://sparklight.com"
-            // };
-
-            fetch(`http://${ip}/sd/`).then(res => {
-                let regex = /tmpfs(.*?)\u0000/g;
-                let found = [...res.data.matchAll(regex)];
-                found = found.map(f => `http://${ip}${f[1]}`);
-                let alarms = found.filter(f => f.includes('/A'));
-                console.log(alarms, found);
-                let links = [];
-                alarms.forEach(a => {
-                    let link = document.createElement('div');
-                    let text = document.createTextNode(a);
-                    // link.setAttribute('href', a);
-                    link.setAttribute('onclick', 'javascript:playback("' + a + '")');
-                    link.appendChild(text);
-                    links.push(link)
-                })
-                document.getElementById('alarms').append(...links,);
-                console.log(found)
-            })
-
-        }
-
-        function oldGetDays() {
-
-            axios.get(`http://${ip}/tmpfs/sd/${date}/recdata.db`) //127.0.0.1:8000/?get=
-                .then(res => {
-                    let regex = /tmpfs(.*?)\u0000/g;
-                    let found = [...res.data.matchAll(regex)];
-                    found = found.map(f => `http://${ip}${f[1]}`);
-                    let alarms = found.filter(f => f.includes('/A'));
-                    console.log(alarms, found);
-                    let links = [];
-                    alarms.forEach(a => {
-                        let link = document.createElement('div');
-                        let text = document.createTextNode(a);
-                        // link.setAttribute('href', a);
-                        link.setAttribute('onclick', 'javascript:playback("' + a + '")');
-                        link.appendChild(text);
-                        links.push(link)
-                    })
-                    document.getElementById('alarms').append(...links,);
-                })
-        }
-
-        // rtsp://default:@192.168.0.39:554/11
-        // http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data
-
 
 
     </script>
@@ -404,15 +338,15 @@
     <div class="menu-wrap">
         <input type="checkbox" class="toggler" />
         <div class="hamburger">
-            <div class="poo">
-            </div>
+            <div class="poo"></div>
         </div>
         <div class="menu">
             <ul>
                 <li>
-                    <div class="col" style="color:white">
-                        <span>Speed <input data-prefix="Rate" id="rate" value="63" data-decimals="0" min="1" max="63"
-                                step="1" type="number" style="text-align: center" /></span>
+                    <div class="col" style="color: white">
+                        <span>Speed
+                            <input data-prefix="Rate" id="rate" value="63" data-decimals="0" min="1" max="63" step="1"
+                                type="number" style="text-align: center" /></span>
                     </div>
                 </li>
 
@@ -421,79 +355,97 @@
                         <tbody>
                             <tr>
                                 <td>　</td>
-                                <td><a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('up')"
+                                <td>
+                                    <a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('up')"
                                         onmouseup="ptzcmdSubmit('stop')">
                                         <h1><i class="bi bi-arrow-up-circle-fill"></i></h1>
-                                    </a></td>
+                                    </a>
+                                </td>
                                 <td>　</td>
                             </tr>
                             <tr>
-                                <td><a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('left')"
+                                <td>
+                                    <a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('left')"
                                         onmouseup="ptzcmdSubmit('stop')">
                                         <h1><i class="bi bi-arrow-left-circle-fill"></i></h1>
-                                    </a></td>
-                                <td><a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('home')">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onmouseout="ptzout()" onmousedown="ptzctrlpresetSubmit('0')">
                                         <h1><i class="bi bi-house-fill"></i></h1>
-                                    </a></td>
-                                <td><a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('right')"
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('right')"
                                         onmouseup="ptzcmdSubmit('stop')">
                                         <h1><i class="bi bi-arrow-right-circle-fill"></i></h1>
-                                    </a></td>
+                                    </a>
+                                </td>
                             </tr>
                             <tr>
                                 <td>　</td>
-                                <td><a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('down')"
+                                <td>
+                                    <a onmouseout="ptzout()" onmousedown="ptzcmdSubmit('down')"
                                         onmouseup="ptzcmdSubmit('stop')">
                                         <h1><i class="bi bi-arrow-down-circle-fill"></i></h1>
-                                    </a></td>
+                                    </a>
+                                </td>
                                 <td>　</td>
                             </tr>
                         </tbody>
                     </table>
                 </li>
 
-                <li><br>
-                    <p> </p>
+                <li>
+                    <br />
+                    <p></p>
                 </li>
 
-                <li style="" class="fixed-start ">
+                <li style="" class="fixed-start">
                     <div class="container">
                         <div class="col">
-                            <div class="col" style="color:white">
-                                <span>Preset <input data-prefix="Preset" id="preset" value="1"
-                                        style="text-align: center" data-decimals="0" min="1" max="255" step="1"
-                                        type="number" /></span>
+                            <div class="col" style="color: white">
+                                <span>Preset
+                                    <input data-prefix="Preset" id="preset" value="1" style="text-align: center"
+                                        data-decimals="0" min="1" max="255" step="1" type="number" /></span>
                             </div>
-                            <div class="col" style="color:white">
-                                <button onclick="poscall_preset()" type="button"
-                                    class="btn btn-primary col">Call</button>
-                                <button onclick="set_preset()" type="button" class="btn btn-primary">Set</button>
+                            <div class="col" style="color: white">
+                                <button onclick="poscall_preset()" type="button" class="btn btn-primary col">
+                                    Call
+                                </button>
+                                <button onclick="set_preset()" type="button" class="btn btn-primary">
+                                    Set
+                                </button>
                             </div>
 
                             <div class="col">
-                                <button onclick="del_preset()" type="button" class="btn btn-primary">Remove</button>
+                                <button onclick="del_preset()" type="button" class="btn btn-primary">
+                                    Remove
+                                </button>
                             </div>
                         </div>
-
                     </div>
                 </li>
-                <!--  <li>
-                    <div id="scan">
+                <li>
+                    <!-- <div id="scan">
                         <button type="button" class="btn btn-primary" onclick="ptzcmdSubmit('hscan')">H Scan</button>
                         <button type="button" class="btn btn-primary" onclick="ptzcmdSubmit('vscan')">V Scan</button>
-                    </div>
+                    </div> -->
                     <div id="pos" style="">
-                        <button type="button" class="btn btn-primary" onclick="ptzsetpresetSubmit('0')">Set 0</button>
-                        <button type="button" class="btn btn-primary" onclick="ptzctrlpresetSubmit('0')">Call 0</button>
+                        <button type="button" class="btn btn-primary" onclick="ptzsetpresetSubmit('0')">
+                            Set <i class="bi bi-house-fill" style="color: white"></i>
+                        </button>
+                        <!-- <button type="button" class="btn btn-primary" onclick="ptzctrlpresetSubmit('0')">Call 0</button> -->
                     </div>
-                </li> -->
+                    <div id="alarms"></div>
+                </li>
             </ul>
         </div>
     </div>
     <canvas id="video_canvas"></canvas>
     <!-- <video src="http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data">video</video> -->
-    <iframe id="frame" marginwidth="0" scrolling="auto" marginheight="0" noresize="" src="" style="display:hidden"
-        zz></iframe>
+    <iframe id="frame" marginwidth="0" scrolling="auto" marginheight="0" noresize="" src=""
+        style="display: hidden"></iframe>
 </body>
 
 </html>

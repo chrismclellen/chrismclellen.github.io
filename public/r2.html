@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://cdn.jsdelivr.net/lodash/4/lodash.min.js"></script>
+  <script src="https://unpkg.com/react@16.12.0/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@16.12.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
+  <script type="text/babel">
+    
+    // A helper to recursively create DOM nodes
+    // first argument is a set of nodes
+    // Second argument is a render function
+    function createComponent(dNode, h) {
+      // Handle empty elements and return empty array in case the dNode passed in is empty
+      if (_.isEmpty(dNode)) {
+        return [];
+      }
+      // if the el is array call createComponent for all nodes
+      if (_.isArray(dNode)) {
+        return dNode.map((child) => createComponent(child, h))
+      }
+      let children = []; 
+      
+      // If the node has children render them too
+      if (dNode.children && dNode.children.length > 0) {
+        dNode.children.forEach((c) => {
+          if (_.isString(c)) {
+            children.push(c)
+          } else {
+            children.push(createComponent(c, h))
+          }
+        });
+      }
+
+      // Need to clone 
+      const properties = _.cloneDeep(dNode.properties) || {}
+      
+      // This is to satisfy React warning that children should have a key
+      properties.key = Date.now() +  '.' + Math.random(1000)
+      return h(dNode.tagName, properties, children.length > 0? children : dNode.textNode)
+    }      
+    
+    // The UI Engine component, takes a Javascript object/array or nodes as prop and renders it
+    function UIEngine({nodes}) {
+      return createComponent(nodes, React.createElement)
+    }
+    
+    // An application component consuming the UiEngine
+    function App() {
+      const nodes = {
+        tagName: 'div',
+        children: [
+          {
+            tagName: 'h1',
+            textNode: 'Great News',
+            properties: {
+              style: {'textTransform': 'uppercase'}
+            }
+          },
+          {
+            tagName: 'h3',
+            textNode: 'YOU CAN CREATE REACT COMPONENTS OUT OF JSON',
+            properties: {
+              style: {textTransform: 'lowercase'}
+            }
+          },
+          {
+            tagName: 'img',
+            properties: {
+              src: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0xMS41IC0xMC4yMzE3NCAyMyAyMC40NjM0OCI+CiAgPHRpdGxlPlJlYWN0IExvZ288L3RpdGxlPgogIDxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIyLjA1IiBmaWxsPSIjNjFkYWZiIi8+CiAgPGcgc3Ryb2tlPSIjNjFkYWZiIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIi8+CiAgICA8ZWxsaXBzZSByeD0iMTEiIHJ5PSI0LjIiIHRyYW5zZm9ybT0icm90YXRlKDYwKSIvPgogICAgPGVsbGlwc2Ugcng9IjExIiByeT0iNC4yIiB0cmFuc2Zvcm09InJvdGF0ZSgxMjApIi8+CiAgPC9nPgo8L3N2Zz4K',
+              width: '100px',
+              height: '100px'
+            }
+          },
+          {
+            tagName: 'hr'
+          },
+          {
+            tagName: 'a',
+            properties: {
+              href: '#'
+            },
+            textNode: 'react.js'
+          }
+        ]
+      };
+      return (
+        <div>
+          <UIEngine nodes={nodes} />
+        </div>
+      )
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'))
+  </script>
+</body>
+</html>

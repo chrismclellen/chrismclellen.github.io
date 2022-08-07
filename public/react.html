@@ -1,171 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-  <meta charset="utf-8">
-  <title>I am Chris</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="img/assets/favicon.png" rel="icon" type="image/png">
-  <link href="css/init.css" rel="stylesheet" type="text/css">
-  <link href="css/ion-icons.min.css" rel="stylesheet" type="text/css">
-  <link href="css/etline-icons.min.css" rel="stylesheet" type="text/css">
-  <link href="css/theme.css" rel="stylesheet" type="text/css">
-  <link href="css/custom.css" rel="stylesheet" type="text/css">
-  <link href="css/colors/purple.css" rel="stylesheet" type="text/css">
-  <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700%7CRaleway:400,100,200,300%7CHind:400,300"
-    rel="stylesheet" type="text/css">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-    type="text/css">
+	<meta charset="utf-8" />
+	<title>I am Chris</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link href="img/assets/favicon.png" rel="icon" type="image/png">
+	<link href="css/init.css" rel="stylesheet" type="text/css">
+	<link href="css/ion-icons.min.css" rel="stylesheet" type="text/css">
+	<link href="css/etline-icons.min.css" rel="stylesheet" type="text/css">
+	<link href="css/theme.css" rel="stylesheet" type="text/css">
+	<link href="css/custom.css" rel="stylesheet" type="text/css">
+	<link href="css/colors/purple.css" rel="stylesheet" type="text/css">
+	<link href="css/bootstrap-reboot.css" rel="stylesheet" type="text/css">
+
+	<script src="js/bootstrap.bundle.min.js"></script>
 
 
-  <style>
-    body {
-      background: #000;
-      color: #aaa;
-      font: 100%/20px helvetica, arial, sans-serif;
-    }
 
-    canvas {
-      display: block;
-      height: 100%;
-      left: 0;
-      margin: 0;
-      padding: 0;
-      position: relative;
-      top: 0;
-      width: 100%
-    }
+	
+	
 
-    #control-panel {
-      background: rgba(0, 0, 0, .75);
-      border: 1px solid #333;
-      left: 20px;
-      padding: 10px 15px;
-      position: absolute;
-      top: 20px;
-      z-index: 2;
-    }
 
-    p {
-      font-size: 12px;
-      margin: 0 0 5px;
-    }
+    <style>
+        body {
+            background: #000;
+            color: #aaa;
+            font: 100%/20px helvetica, arial, sans-serif;
+          }
+          
+          canvas {
+            display: block;
+            height: 100%;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            top: 0;
+            width: 100%
+          }
+          
+          #control-panel {
+            background: rgba(0,0,0,.75);
+            border: 1px solid #333;
+            left: 20px;
+            padding: 10px 15px;
+            position: absolute;
+            top: 20px;
+            z-index: 2;
+          }
+          
+          p {
+            font-size: 12px;
+            margin: 0 0 5px;
+          }
+          
+          label {
+            font-size: 12px;
+            font-weight: bold;
+          }	
+          
+          button {
+            display: block; 
+            margin: 10px 0 5px;
+          }
+          
+          a {
+            color: #fff;
+            font-size: 12px;
+            text-decoration: none;
+          }
+    </style>
 
-    label {
-      font-size: 12px;
-      font-weight: bold;
-    }
+	<script src="https://cdn.jsdelivr.net/lodash/4/lodash.min.js"></script>
+	<script src="https://unpkg.com/react@16.13.1/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16.13.1/umd/react-dom.development.js"></script>
+	<script src="https://unpkg.com/@babel/standalone@7.8.3/babel.js"></script>
 
-    button {
-      display: block;
-      margin: 10px 0 5px;
-    }
-
-    a {
-      border-bottom: 1px dotted #444;
-      color: #fff;
-      font-size: 12px;
-      text-decoration: none;
-    }
-  </style>
-
+	
 </head>
 
-<body data-fade-in="true">
-
-      <div id="root"></div>
-      <!-- ES Module Shims: Import maps polyfill for modules browsers without import maps support (all except Chrome 89+) -->
-      <script async src="https://ga.jspm.io/npm:es-module-shims@0.10.1/dist/es-module-shims.min.js"></script>
-      <!--    JSPM Generator Import Map Edit URL: https://generator.jspm.io/#U2VgYGBiDkpNTC5RCC5JLCpJLWIoAvF0U/JzHQzN9Qz0DCECUA4AS5lz8DEA -->
-      <script type="importmap">
-        {
-          "imports": {
-            "react": "https://ga.jspm.io/npm:react@17.0.1/dev.index.js",
-            "react-dom": "https://ga.jspm.io/npm:react-dom@17.0.1/dev.index.js"
-          },
-          "scopes": {
-            "https://ga.jspm.io/": {
-              "object-assign": "https://ga.jspm.io/npm:object-assign@4.1.1/index.js",
-              "scheduler": "https://ga.jspm.io/npm:scheduler@0.20.1/dev.index.js",
-              "scheduler/tracing": "https://ga.jspm.io/npm:scheduler@0.20.1/dev.tracing.js"
-            }
-          }
-        }
-      </script>
+<body data-fade-in="true" >
+	<div id="root" ></div>
+	<div class="background-image">
+		<img src="img/backgrounds/bg web.png" alt="#">
+	</div>
 
 
-      <div class="pre-loader">
-        <div>
+	<script src="js/jquery.js"></script>
+	<script src="js/init.js"></script>
+	<script src="js/scripts.js"></script>
+	<script type="text/babel" src="./components/nav.js"></script>
+	<script type="text/babel" src="./components/footer.js"></script>
+	<script type="text/babel" src="./components/hero.js"></script>
+	<script type="text/babel" src="./components/app.js"></script>
 
-      <!-- Start Header -->
-      <nav class="navbar nav-down" data-fullwidth="true" data-menu-style="transparent" data-animation="shrink">
-        <!-- Styles: light, dark, transparent, transparent-to-dark | Animation: hiding, shrink -->
-        <div class="container">
-
-          <div class="navbar-header">
-            <div class="container">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar top-bar"></span>
-                <span class="icon-bar middle-bar"></span>
-                <span class="icon-bar bottom-bar"></span>
-              </button>
-              <a class="navbar-brand to-top" href="#"><img src="img/assets/logo-light.png" class="logo-light"
-                  alt="#"><img src="img/assets/logo-dark.png" class="logo-dark" alt="#"></a>
-            </div>
-          </div>
-
-          <div id="navbar" class="navbar-collapse collapse">
-            <div class="container">
-              <ul class="nav navbar-nav menu-right">
-                <li><a href="#hero">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#works">Work</a></li>
-                <li class="dropdown">
-                  <a class="dropdown-toggle">POS IP Cam<i class="ion-ios-arrow-down"></i></a>
-                  <ul class="dropdown-menu">
-                    <li><a
-                        href="https://chrome.google.com/webstore/detail/pos-ip-camera/gbmahbabdhohnepmlfchdhlkgneodhjo">Chrome
-                        Extension</a></li>
-                    <li><a href="cert.html">Your Certificate</a></li>
-                    <li><a href="https://youtu.be/L_Ve8t6QZTc">TV Commercial</a></li>
-                  </ul>
-                </li>
-                <li><a href="#contact">Contact</a></li>
-              </ul>
-
-            </div>
-          </div>
-        </div>
-      </nav>
-
-
-
-
-      <script type="module" src="./components/app.jsx"></script>
-      <script src="js/jquery.js"></script>
-      <script src="js/init.js"></script>
-      <script src="js/scripts.js"></script>
+	<code>
+		script defer async src="%PUBLIC_URL%/some-file.js"></script
+	</code>
 </body>
 
 </html>
-
-
-<!--
-        Production Import Map for React:
-        <script type="importmap">
-        {
-          "imports": {
-            "react": "https://ga.jspm.io/npm:react@17.0.1/index.js",
-            "react-dom": "https://ga.jspm.io/npm:react-dom@17.0.1/index.js"
-          },
-          "scopes": {
-            "https://ga.jspm.io/": {
-              "object-assign": "https://ga.jspm.io/npm:object-assign@4.1.1/index.js",
-              "scheduler": "https://ga.jspm.io/npm:scheduler@0.20.1/index.js"
-            }
-          }
-        }
-        </script>
-      -->
