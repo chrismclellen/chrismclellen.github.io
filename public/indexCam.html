@@ -102,8 +102,8 @@
         var status;
         var videoUrl = window.location.search.vid || "";
 
-        var extraStuff = `rtsp://default:@192.168.0.39:554/11
-         http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data `;
+        // var extraStuff = `rtsp://default:@192.168.0.39:554/11   http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data `;
+        // http://192.168.1.9:8013/livestream/12?action=play&media=video_audio
 
         if (!ip) {
             ip = promptForIp();
@@ -112,10 +112,10 @@
             httpport = promptForPort();
         }
         if (!username) {
-            username = promptForUsername();
+            username = promptForUser();
         }
         if (!password) {
-            password = promptForPassword();
+            password = promptForPass();
         }
 
         window.addEventListener("load", function () {
@@ -147,6 +147,7 @@
                     e.preventDefault();
                     e.stopPropagation();
                 }
+                console.log(e.code);
                 switch (e.code) {
                     case "ArrowLeft":
                         ptzcmdSubmit("left");

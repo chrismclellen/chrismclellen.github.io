@@ -3,13 +3,13 @@
 
 <head>
     <title>IP FUCKING CAMERA</title>
-    <script src="http://192.168.0.39/js/h265.js" type="text/javascript"></script>
+    <script src="http://ipcam.chrismclellen.app/js/h265.js" type="text/javascript"></script>
     <script src="http://192.168.0.39/js/libde265.js" type="text/javascript"></script>
-    <script src="./js/commonff.js" type="text/javascript"></script>
-    <script src="http://192.168.0.39/js/pcm-player.js" type="text/javascript"></script>
-    <script src="./js/video-player.js" type="text/javascript"></script>
-    <script src="./js/webgl-player.js" type="text/javascript"></script>
-    <script src="http://192.168.0.39/js/base64.js" type="text/javascript"></script>
+    <script src="http://ipcam.chrismclellen.app/js/commonff.js" type="text/javascript"></script>
+    <script src="http://ipcam.chrismclellen.app/js/pcm-player.js" type="text/javascript"></script>
+    <script src="http://192.168.0.39/js/video-player.js" type="text/javascript"></script>
+    <script src="http://ipcam.chrismclellen.app/js/webgl-player.js" type="text/javascript"></script>
+    <script src="http://ipcam.chrismclellen.app/js/base64.js" type="text/javascript"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -23,7 +23,7 @@
         }
     </style>
     <script type="text/javascript">
-        var params = new URL(window.location).searchParams;
+        var path = new URL(window.location).searchParams.get("vid");
         //var url = decodeURIComponent(params.get('url'));
         var player = null;
         var ip = '192.168.0.39';
@@ -32,12 +32,15 @@
         var password = 'passw0rd123'
         var b64 = new Base64();
         var base64User = b64.encode(username + ":" + password);
-        let url = 'http://base64User@192.168.0.39/sd/20220806/record003/A220806_173231_173245.265'
-        var vid = '';
+        let url = `http://${base64User}@${ip}:${httpport}${path}`; //sd/20220806/record003/A220806_173231_173245.265'
+        // let url = `http://${username}:${password}@${ip}:${port}/${path}`
         var stream = '12'; //stream 11 causes major lag, fucks everything up
+        let vid;
+        let status;
 
         window.addEventListener('load', function () {
             vid = document.getElementById('video_canvas')
+            status = document.getElementById('status')
             vid.width = window.innerWidth;
             vid.height = window.innerHeight;
 
@@ -49,13 +52,14 @@
             window.addEventListener('resize', windowResize);
 
             play(url);
+            playback(url);
         })
 
         function start() {
-            {{/*  play()  */}}
+            play()
             // old cam 
-            {{/*  player = new libde265.RawPlayer(vid);  */}}
-            {{/*  player.connect()  */}}
+            player = new libde265.RawPlayer(vid);
+            player.connect()
 
             // new cam
             // player = new HxPlayer();
@@ -68,13 +72,11 @@
         //libde265
         function play(file) {
             console.log("playing " + file)
-            var video_canvas = document.getElementById("video_canvas");
-            player = new libde265.RawPlayer(video_canvas);
+            player = new libde265.RawPlayer(vid);
             player.playback(file);
         }
 
-        {
-            {/*  
+      
         function playback(file) {
             // event.preventDefault();
             if (player) {
@@ -105,12 +107,10 @@
                 }
             }) 
             player.playback(file);
-        };  */}
-        }
+        }; 
 
 
-        {
-            {/*  function getDays() {
+        function getDays() {
             let d = new Date();
             let y = d.getFullYear();
             let m = `${d.getMonth() + 1}`;
@@ -144,12 +144,9 @@
                 document.getElementById('alarms').append(...links,);
                 console.log(found)
             })
-
-        }  */}
         }
 
-        {
-            {/*  function oldGetDays() {
+        function oldGetDays() {
 
             let d = new Date();
             let y = d.getFullYear();
@@ -178,7 +175,6 @@
                     })
                     document.getElementById('alarms').append(...links,);
                 })
-        }  */}
         }
 
         // rtsp://default:@192.168.0.39:554/11
@@ -193,11 +189,10 @@
     <div id="status"></div>
     <canvas id="video_canvas"></canvas>
     video
-    <video src="http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data">video</video>
+    <div><video src = "http://192.168.0.39/livestream.cgi?stream=2&action=play&media=video_audio_data">video</video>
     after
 
-    <iframe id="frame" marginwidth="0" scrolling="auto" marginheight="0" noresize="" src=""
-        style="display:hidden"></iframe>
+    <iframe id="frame" marginwidth="0" scrolling="auto" marginheight="0" noresize="" src="" style="display:hidden"></iframe>
 </body>
 
 </html>
