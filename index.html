@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>rainyday.js demo #3</title>
+		<title>Remember -- you will die</title>
 		<style media="screen">
 			body {
 				overflow: hidden;
@@ -29,7 +29,7 @@
 		<script>
 		// function run() {
 			var image = document.getElementById('background');
-			var sourceParent = image.parent;
+			var sourceParent =  document.getElementsByTagName('body')[0];
 			
 			// image.onload = function () {
 			var engine = new RainyDay({
