@@ -21,7 +21,7 @@
 	
 	</head>
 
-	<body onload="run();">
+	<body onload="//run();">
 
 		<img id="background" alt="background" src="./img/backgrounds/MM.png" />
 
@@ -29,9 +29,30 @@
 		<script>
 		// function run() {
 			var image = document.getElementById('background');
+			var sourceParent = image.parent;
+			
 			// image.onload = function () {
 			var engine = new RainyDay({
-				image: image
+				image: image,
+				opacity: 1,
+				blur: 10,
+				crop: [0, 0, image.naturalWidth, image.naturalHeight],
+				enableSizeChange: true,
+				parentElement: sourceParent,
+				fps: 24,
+				fillStyle: '#8ED6FF',
+				enableCollisions: true,
+				gravityThreshold: 3,
+				gravityAngle: Math.PI / 2,
+				gravityAngleVariance: 0,
+				reflectionScaledownFactor: 5,
+				reflectionDropMappingWidth: 200,
+				reflectionDropMappingHeight: 200,
+				width: sourceParent.clientWidth,
+				height: sourceParent.clientHeight,
+				position: 'absolute',
+				// top: parentOffset.top + 'px',
+				// left: parentOffset.left + 'px'
 			});
 			engine.rain([
 				[0, 2, 200],
