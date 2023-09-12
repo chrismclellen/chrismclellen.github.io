@@ -1,21 +1,18 @@
 <html lang="en">
-
 	<head>
 		<meta charset="utf-8">
-		<title>Remember -- you will die</title>
+		<title>Remember, you too, must die</title>
 		<style media="screen">
  			body {
-                background-color: #000000;
+                		background-color: #000000;
 				overflow: hidden;
 				margin: 0;
 				padding: 0;
 			};
-
 		</style>
-	
 	</head>
 
-    <body onload="run();" onmouseover="document.getElementById('audioplayer').play();">
+    <body onload="run();" onmousemove="document.getElementById('audioplayer').play();">
 
 		<img id="background" alt="background" src="https://chrismclellen.github.io/img/backgrounds/MM.png" />
 
@@ -23,7 +20,6 @@
 		<script>
 		function run() {
 			var image = document.getElementById('background');
-            {{/*  image.width= '10%';  */}}
 			var sourceParent =  document.getElementsByTagName('body')[0];
 			
 			image.onload = function () {
