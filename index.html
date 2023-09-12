@@ -14,7 +14,10 @@
 	
 	</head>
 
-	<body onload="run();">
+	<body onload="run();" onmouseover=" () => {
+		var music = document.getElementById('audioplayer');
+		music.play()
+		}">
 
 		<img id="background" alt="background" src="./img/backgrounds/MM.png" />
 
@@ -28,7 +31,7 @@
 			var engine = new RainyDay({
 				image: image,
 				opacity: 1,
-				blur: 10,
+				blur: 1,
 				crop: [0, 0, image.naturalWidth, image.naturalHeight],
 				enableSizeChange: true,
 				fps: 24,
@@ -63,8 +66,9 @@
 			Your browser does not support the audio element.
 		</audio>
 		<script>
-			var music = document.getElementById('audioplayer');
-			music.play();
+			// var music = document.getElementById('audioplayer');
+			// var body = document.getElementsByTagName('body')[0];
+			// music.play();
 		</script>
 
 		
