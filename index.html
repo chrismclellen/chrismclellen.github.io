@@ -14,7 +14,7 @@
 	
 	</head>
 
-	<body onload="run();" onmouseover="alert('shit);">
+	<body onload="run();">
 
 		<img id="background" alt="background" src="./img/backgrounds/MM.png" />
 
@@ -41,11 +41,11 @@
 				reflectionScaledownFactor: 5,
 				reflectionDropMappingWidth: 200,
 				reflectionDropMappingHeight: 200,
-				// width: sourceParent.clientWidth,
-				// height: sourceParent.clientHeight,
+				width: sourceParent.clientWidth,
+				height: sourceParent.clientHeight,
 				position: 'absolute',
-				// top: parentOffset.top + 'px',
-				// left: parentOffset.left + 'px',
+				top: parentOffset.top + 'px',
+				left: parentOffset.left + 'px',
 				sound: 'https://rainymood.com/audio1112/0.mp3',
 			});
 			engine.rain([
