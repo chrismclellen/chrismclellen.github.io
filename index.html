@@ -4,35 +4,34 @@
 		<meta charset="utf-8">
 		<title>Remember -- you will die</title>
 		<style media="screen">
-/* 			body {
+ 			body {
+                background-color: #000000;
 				overflow: hidden;
 				margin: 0;
 				padding: 0;
-			} */
+			};
 
 		</style>
 	
 	</head>
 
-	<body onload="run();" onmouseover=" () => {
-		var music = document.getElementById('audioplayer');
-		music.play()
-		}">
+    <body onload="run();" onmouseover="document.getElementById('audioplayer').play();">
 
-		<img id="background" alt="background" src="./img/backgrounds/MM.png" />
+		<img id="background" alt="background" src="https://chrismclellen.github.io/img/backgrounds/MM.png" />
 
-		<script src="./js/rainyday.js"></script>
+		<script src="https://chrismclellen.github.io/js/rainyday.js"></script>
 		<script>
 		function run() {
 			var image = document.getElementById('background');
+            {{/*  image.width= '10%';  */}}
 			var sourceParent =  document.getElementsByTagName('body')[0];
 			
 			image.onload = function () {
 			var engine = new RainyDay({
 				image: image,
 				opacity: 1,
-				blur: 1,
-				crop: [0, 0, image.naturalWidth, image.naturalHeight],
+				blur: .1,
+				crop: [0, 0, image.naturalWidth*2, image.naturalHeight],
 				enableSizeChange: true,
 				fps: 24,
 				fillStyle: '#8ED6FF',
@@ -52,7 +51,7 @@
 			], 100);
 			};
 			image.crossOrigin = 'anonymous';
-			image.src = './img/backgrounds/MM.png';
+			image.src = 'https://chrismclellen.github.io/img/backgrounds/MM.png';
 		}
 
 		</script>
