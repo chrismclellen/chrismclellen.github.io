@@ -31,7 +31,6 @@
 				blur: 10,
 				crop: [0, 0, image.naturalWidth, image.naturalHeight],
 				enableSizeChange: true,
-				parentElement: sourceParent,
 				fps: 24,
 				fillStyle: '#8ED6FF',
 				enableCollisions: true,
@@ -41,15 +40,11 @@
 				reflectionScaledownFactor: 5,
 				reflectionDropMappingWidth: 200,
 				reflectionDropMappingHeight: 200,
-				width: sourceParent.clientWidth,
-				height: sourceParent.clientHeight,
 				position: 'absolute',
-				top: parentOffset.top + 'px',
-				left: parentOffset.left + 'px',
 				sound: 'https://rainymood.com/audio1112/0.mp3',
 			});
 			engine.rain([
-				[0, 2, 200],
+				[0, 2, 800],
 				[3, 3, 1]
 			], 100);
 			};
