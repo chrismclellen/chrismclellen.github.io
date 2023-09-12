@@ -14,17 +14,17 @@
 	
 	</head>
 
-	<body onload="//run();">
+	<body onload="run();">
 
 		<img id="background" alt="background" src="./img/backgrounds/MM.png" />
 
 		<script src="./js/rainyday.js"></script>
 		<script>
-		// function run() {
+		function run() {
 			var image = document.getElementById('background');
 			var sourceParent =  document.getElementsByTagName('body')[0];
 			
-			// image.onload = function () {
+			image.onload = function () {
 			var engine = new RainyDay({
 				image: image,
 				opacity: 1,
@@ -52,10 +52,10 @@
 				[0, 2, 200],
 				[3, 3, 1]
 			], 100);
-			// };
-			// image.crossOrigin = 'anonymous';
-			// image.src = './img/backgrounds/MM.png';
-		// }
+			};
+			image.crossOrigin = 'anonymous';
+			image.src = './img/backgrounds/MM.png';
+		}
 
 		</script>
 		
